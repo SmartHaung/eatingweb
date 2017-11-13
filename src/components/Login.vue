@@ -20,7 +20,7 @@ export default {
       logining: false,
       loginForm: {
         account: "",
-        password: "111"
+        password: ""
       },
       rules2: {
         account: [{ required: true, message: "请输入账号", trigger: "blur" }],
@@ -29,7 +29,25 @@ export default {
     };
   },
   methods: {
-    handleSubmit: function() {}
+    handleSubmit: function() {
+      var _this = this;
+      this.$refs.loginForm.validate(valid => {
+        this.$http
+          .jsonp("https://huangwenbin.xin/", {
+            account: this.loginForm.account,
+            password: this.loginForm.password
+          })
+          .then(res => {});
+      });
+    }
+  },
+  mounted() {
+    let component = this;
+    document.onkeydown = function(event) {
+      if (event.key == "Enter") {
+        component.handleSubmit();
+      }
+    };
   }
 };
 </script>
