@@ -1,0 +1,35 @@
+<template>
+  <el-form :model="loginForm" :rules="rules2" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+    <h3 class="title">系统登录</h3>
+    <el-form-item prop="account">
+       <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
+    </el-form-item>
+    <el-form-item prop="password">
+      <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
+    </el-form-item>
+    <el-form-item style="width:100%;">
+      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
+    </el-form-item>
+  </el-form>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      logining: false,
+      loginForm: {
+        account: "",
+        password: "111"
+      },
+      rules2: {
+        account: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+      }
+    };
+  },
+  methods: {
+    handleSubmit: function() {}
+  }
+};
+</script>
