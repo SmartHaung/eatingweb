@@ -9,8 +9,8 @@ export const getLocalStorage = (key) => {
   var storageValue = localStorage.getItem(key)
   if (storageValue) {
     storageValue = JSON.parse(storageValue)
-    if (new Date().getTime() - storageValue.time <= 3600 * 24) {
-      return JSON.parse(storageValue.data)
+    if (new Date().getTime() - storageValue.time <= 3600 * 24 * 1000) {
+      return storageValue.data
     }
   }
 }

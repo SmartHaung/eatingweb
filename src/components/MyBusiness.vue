@@ -14,16 +14,14 @@
       </el-col>
       <el-col>
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column label="订单号" width="180">
+          <el-table-column label="店铺名称" width="180">
             <template slot-scope="scope">
-              <span style="margin-left: 10px">{{ scope.row.callqueueOrderid }}</span>
+              <span style="margin-left: 10px">{{ scope.row.businessInfoName }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="updateCallQueue(scope.row.callqueueId,2)">部分完成</el-button>
-              <el-button size="mini" type="warning" @click="updateCallQueue(scope.row.callqueueId,3)">全部完成</el-button>
-              <el-button size="mini" type="success" @click="updateCallQueue(scope.row.callqueueId,4)">取消</el-button>
+              <el-button size="mini" type="primary" @click="callQueue(scope.row.businessInfoId)">叫号</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -43,51 +41,28 @@ export default {
     };
   },
   methods: {
-    updateCallQueue(callqueueId, type) {
-      this.$http
-        .jsonp(
-          "https://huangwenbin.xin/callqueue/handleFromWeb?callqueueHandlelogCallqueueid=" +
-            callqueueId +
-            "&callqueueHandlelogCreateuserUnionid=" +
-            this.user.unionId +
-            "&callQueueStatus=" +
-            type +
-            "&type=1"
-        )
-        .then(res => {
-          if (res && res.data && res.data.code && res.data.code == 1) {
-            this.$message.info("操作成功");
-            this.queryCallQueue();
-          } else {
-            this.$message.error("操作失败");
-          }
-        });
+    callQueue(businessInfoId) {
+      this.$router.push("/callqueue/" + businessInfoId);
     },
-    queryCallQueue() {
-      if (
-        this.$route &&
-        this.$route.params &&
-        this.$route.params.businessInfoId
-      ) {
-        var user = getLocalStorage("eating-user");
-        if (!user) {
-          this.$router.push("/");
-        } else {
-          this.user = user;
-          this.url = user.userInfo.avatarUrl;
-          this.$http
-            .jsonp(
-              "https://huangwenbin.xin/callqueue/queryCallQueueListForWeb?callqueueBusinessId=" +
-                this.$route.params.businessInfoId
-            )
-            .then(res => {
-              if (res && res.data && res.data.code && res.data.code == 1) {
-                if (res.data.data && res.data.data.callQueueList) {
-                  this.tableData = res.data.data.callQueueList;
-                }
+    queryMybusiness() {
+      var user = getLocalStorage("eating-user");
+      if (!user) {
+        this.$router.push("/");
+      } else {
+        this.user = user;
+        this.url = user.userInfo.avatarUrl;
+        this.$http
+          .jsonp(
+            "https://huangwenbin.xin/business/listBusinessInfoForWeb?unionid=" +
+              user.unionId
+          )
+          .then(res => {
+            if (res && res.data && res.data.code && res.data.code == 1) {
+              if (res.data.data && res.data.data.businessList) {
+                this.tableData = res.data.data.businessList;
               }
-            });
-        }
+            }
+          });
       }
     },
     logout() {
@@ -98,11 +73,7 @@ export default {
     }
   },
   mounted() {
-    this.queryCallQueue();
-    window.this = this;
-    setInterval(function() {
-      window.this.queryCallQueue();
-    }, 10000);
+    this.queryMybusiness();
   }
 };
 </script>

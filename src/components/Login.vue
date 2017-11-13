@@ -1,53 +1,70 @@
 <template>
-  <el-form :model="loginForm" :rules="rules2" ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
+  <el-form  ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3>系统登录</h3>
-    <el-form-item prop="account">
-       <el-input type="text" v-model="loginForm.account" auto-complete="off" placeholder="账号"></el-input>
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input type="password" v-model="loginForm.password" auto-complete="off" placeholder="密码"></el-input>
-    </el-form-item>
-    <el-form-item style="width:100%;">
-      <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit" :loading="logining">登录</el-button>
+    <el-form-item >
+       <img v-bind:src="loginCodeUrl" width="100%" v-if="valid">
+       <label v-if="!valid">登录码失效，请重新刷新页面</label>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
+import { setLocalStorage } from "../api/api";
+import { getLocalStorage } from "../api/api";
 export default {
   data() {
     return {
-      logining: false,
-      loginForm: {
-        account: "",
-        password: ""
-      },
-      rules2: {
-        account: [{ required: true, message: "请输入账号", trigger: "blur" }],
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
-      }
+      loginCodeName: "",
+      loginCodeUrl: "",
+      valid: true
     };
   },
   methods: {
-    handleSubmit: function() {
-      var _this = this;
-      this.$refs.loginForm.validate(valid => {
-        this.$http
-          .jsonp("https://huangwenbin.xin/", {
-            account: this.loginForm.account,
-            password: this.loginForm.password
-          })
-          .then(res => {});
-      });
+    init() {
+      this.loginCodeName = "test";
+      this.getLoginUserInfo();
+    },
+    getLoginUserInfo() {
+      var times = 0;
+      window.this = this;
+      let timer = setInterval(function() {
+        times++;
+        if (times > 18) {
+          clearInterval(timer);
+          this.valid = false;
+        }
+        window.this.$http
+          .jsonp(
+            "https://huangwenbin.xin/user/getLoginUserInfo?key=" +
+              window.this.loginCodeName
+          )
+          .then(res => {
+            if (res && res.data && res.data.code && res.data.code == 1) {
+              clearInterval(timer);
+              if (res.data.data && res.data.data.user) {
+                var user = JSON.parse(res.data.data.user);
+                if (user) {
+                  setLocalStorage("eating-user", user);
+                  window.this.$router.push("/mybusiness");
+                }
+              }
+            }
+          });
+      }, 5000);
     }
   },
   mounted() {
-    let component = this;
-    document.onkeydown = function(event) {
-      if (event.key == "Enter") {
-        component.handleSubmit();
-      }
-    };
+    var user = getLocalStorage("eating-user");
+    if (user) {
+      this.$router.push("/mybusiness");
+    }
+    this.init();
+  },
+  watch: {
+    loginCodeName: function(val) {
+      this.loginCodeUrl =
+        "https://www.huangwenbin.xin/picture/login_" + val + ".jpg";
+    }
   }
 };
 </script>

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import CallQueue from '@/components/CallQueue'
+import MyBusiness from '@/components/MyBusiness'
+
 
 Vue.use(Router)
 
@@ -10,8 +12,14 @@ export default new Router({
     path: '/',
     name: 'Login',
     component: Login
-  }, {
-    path: '/callqueue',
+  },
+  {
+    path: '/mybusiness',
+    name: 'MyBusiness',
+    component: MyBusiness
+  },
+  {
+    path: '/callqueue/:businessInfoId',
     name: 'CallQueue',
     component: CallQueue
   }]
