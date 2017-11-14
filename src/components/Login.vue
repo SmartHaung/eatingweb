@@ -30,17 +30,22 @@ export default {
   },
   methods: {
     init() {
-      this.loginCodeName = "test";
-      this.getLoginUserInfo();
+      this.$http
+        .jsonp("https://huangwenbin.xin/user/createLoginCode")
+        .then(res => {
+          if (res && res.data && res.data.code && res.data.code == 1) {
+            this.loginCodeName = res.data.data.name;
+            window.this.getLoginUserInfo();
+          }
+        });
     },
     getLoginUserInfo() {
       var times = 0;
-      window.this = this;
       let timer = setInterval(function() {
         times++;
         if (times > 18) {
+          window.this.valid = false;
           clearInterval(timer);
-          this.valid = false;
         }
         window.this.$http
           .jsonp(
@@ -60,9 +65,11 @@ export default {
             }
           });
       }, 5000);
+      window.timer = timer;
     }
   },
   mounted() {
+    window.this = this;
     var user = getLocalStorage("eating-user");
     if (user) {
       this.$router.push("/mybusiness");
@@ -74,6 +81,15 @@ export default {
       this.loginCodeUrl =
         "https://www.huangwenbin.xin/picture/login_" + val + ".jpg";
     }
+  },
+  destroyed: function() {
+    clearInterval(window.timer);
+    debugger;
+    this.$http.jsonp(
+      "https://huangwenbin.xin/user/removeLoginCode?name=login_" +
+        this.loginCodeName +
+        ".jpg"
+    );
   }
 };
 </script>

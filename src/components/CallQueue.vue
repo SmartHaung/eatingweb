@@ -57,79 +57,79 @@
 </template>
 
 <script>
-  import {
-    getLocalStorage
-  } from "../api/api";
-  export default {
-    data() {
-      return {
-        tableData: [],
-        user: null,
-        url: "/static/img/trademark.jpg"
-      };
-    },
-    methods: {
-      updateCallQueue(callqueueId, type) {
-        this.$http
-          .jsonp(
-            "https://huangwenbin.xin/callqueue/handleFromWeb?callqueueHandlelogCallqueueid=" +
+import { getLocalStorage } from "../api/api";
+export default {
+  data() {
+    return {
+      tableData: [],
+      user: null,
+      url: "/static/img/trademark.jpg"
+    };
+  },
+  methods: {
+    updateCallQueue(callqueueId, type) {
+      this.$http
+        .jsonp(
+          "https://huangwenbin.xin/callqueue/handleFromWeb?callqueueHandlelogCallqueueid=" +
             callqueueId +
             "&callqueueHandlelogCreateuserUnionid=" +
             this.user.unionId +
             "&callQueueStatus=" +
             type +
             "&type=1"
-          )
-          .then(res => {
-            if (res && res.data && res.data.code && res.data.code == 1) {
-              this.$message.info("操作成功");
-              this.queryCallQueue();
-            } else {
-              this.$message.error("操作失败");
-            }
-          });
-      },
-      queryCallQueue() {
-        if (
-          this.$route &&
-          this.$route.params &&
-          this.$route.params.businessInfoId
-        ) {
-          var user = getLocalStorage("eating-user");
-          if (!user) {
-            this.$router.push("/");
+        )
+        .then(res => {
+          if (res && res.data && res.data.code && res.data.code == 1) {
+            this.$message.info("操作成功");
+            this.queryCallQueue();
           } else {
-            this.user = user;
-            this.url = user.userInfo.avatarUrl;
-            this.$http
-              .jsonp(
-                "https://huangwenbin.xin/callqueue/queryCallQueueListForWeb?callqueueBusinessId=" +
-                this.$route.params.businessInfoId
-              )
-              .then(res => {
-                if (res && res.data && res.data.code && res.data.code == 1) {
-                  if (res.data.data && res.data.data.callQueueList) {
-                    this.tableData = res.data.data.callQueueList;
-                  }
-                }
-              });
+            this.$message.error("操作失败");
           }
-        }
-      },
-      logout() {
-        this.$confirm("确认退出吗?", "提示", {}).then(() => {
-          localStorage.removeItem("eating-user");
-          this.$router.push("/");
         });
+    },
+    queryCallQueue() {
+      if (
+        this.$route &&
+        this.$route.params &&
+        this.$route.params.businessInfoId
+      ) {
+        var user = getLocalStorage("eating-user");
+        if (!user) {
+          this.$router.push("/");
+        } else {
+          this.user = user;
+          this.url = user.userInfo.avatarUrl;
+          this.$http
+            .jsonp(
+              "https://huangwenbin.xin/callqueue/queryCallQueueListForWeb?callqueueBusinessId=" +
+                this.$route.params.businessInfoId
+            )
+            .then(res => {
+              if (res && res.data && res.data.code && res.data.code == 1) {
+                if (res.data.data && res.data.data.callQueueList) {
+                  this.tableData = res.data.data.callQueueList;
+                }
+              }
+            });
+        }
       }
     },
-    mounted() {
-      this.queryCallQueue();
-      window.this = this;
-      setInterval(function () {
-        window.this.queryCallQueue();
-      }, 10000);
+    logout() {
+      this.$confirm("确认退出吗?", "提示", {}).then(() => {
+        localStorage.removeItem("eating-user");
+        this.$router.push("/");
+      });
     }
-  };
-
+  },
+  mounted() {
+    this.queryCallQueue();
+    window.this = this;
+    window.callqueueTimer = setInterval(function() {
+      window.this.queryCallQueue();
+    }, 10000);
+  },
+  destroyed: function() {
+    clearInterval(window.callqueueTimer);
+  }
+};
 </script>
