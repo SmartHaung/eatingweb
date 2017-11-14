@@ -9,7 +9,7 @@
   line-height: 60px;
   background: #20a0ff;
   color: #fff;">
-        <el-col :span="10" style="
+        <el-col :span="10"  style="
   width: 230px;
   height: 60px;
   font-size: 22px;
@@ -45,7 +45,7 @@
           </el-table-column>
           <el-table-column label="操作">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="callQueue(scope.row.businessInfoId)">叫号</el-button>
+              <el-button size="mini" type="primary" @click="callQueue(scope.row.businessInfoId,scope.row.businessInfoUniqueId)">叫号</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -65,8 +65,10 @@ export default {
     };
   },
   methods: {
-    callQueue(businessInfoId) {
-      this.$router.push("/callqueue/" + businessInfoId);
+    callQueue(businessInfoId, businessInfoUniqueId) {
+      this.$router.push(
+        "/callqueue/" + businessInfoId + "/" + businessInfoUniqueId
+      );
     },
     queryMybusiness() {
       var user = getLocalStorage("eating-user");

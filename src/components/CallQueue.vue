@@ -9,7 +9,7 @@
   line-height: 60px;
   background: #20a0ff;
   color: #fff;">
-        <el-col :span="10" style="width: 230px;
+        <el-col :span="10"   style="width: 230px;
   height: 60px;
   font-size: 22px;
   padding-left: 20px;
@@ -18,7 +18,7 @@
   border-right-width: 1px;
   border-right-style: solid;
   width: 230px;">
-          吃饭啦后台管理
+       吃饭啦后台管理
         </el-col>
         <el-col :span="4" style="
   text-align: right;
@@ -27,6 +27,7 @@
           <span style="
   cursor: pointer;
   color: #fff;">
+            <el-button size="mini" type="success" @click="backToMyBusiness">返回商家列表</el-button>
             <el-button size="mini" type="warning" @click="logout">退出登录</el-button>
             <img v-bind:src="url" style="width: 40px;
   height: 40px;
@@ -102,13 +103,17 @@ export default {
           this.$http
             .jsonp(
               "https://huangwenbin.xin/callqueue/queryCallQueueListForWeb?callqueueBusinessId=" +
-                this.$route.params.businessInfoId
+                this.$route.params.businessInfoId +
+                "&businessUniqueId=" +
+                this.$route.params.businessInfoUniqueId
             )
             .then(res => {
               if (res && res.data && res.data.code && res.data.code == 1) {
                 if (res.data.data && res.data.data.callQueueList) {
                   this.tableData = res.data.data.callQueueList;
                 }
+              } else {
+                this.tableData = [];
               }
             });
         }
@@ -119,6 +124,9 @@ export default {
         localStorage.removeItem("eating-user");
         this.$router.push("/");
       });
+    },
+    backToMyBusiness() {
+      this.$router.push("/mybusiness");
     }
   },
   mounted() {

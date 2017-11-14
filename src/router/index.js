@@ -19,7 +19,7 @@ export default new Router({
     component: MyBusiness
   },
   {
-    path: '/callqueue/:businessInfoId',
+    path: '/callqueue/:businessInfoId/:businessInfoUniqueId',
     name: 'CallQueue',
     component: CallQueue
   }]
