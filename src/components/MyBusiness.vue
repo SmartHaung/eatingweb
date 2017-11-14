@@ -1,12 +1,18 @@
 <template>
   <section>
     <el-row class="container">
-      <el-col :span="24" class="header">
+      <el-col :span="24" style="height: 60px;
+  line-height: 60px;
+  background: #20a0ff;
+  color: #fff;">
         <el-col :span="10" class="logo" :class="logo-width">
           吃饭啦后台管理
         </el-col>
-        <el-col :span="4" class="userinfo">
-          <span class="userinfo-inner">
+        <el-col :span="4" style="text-align: right;
+  padding-right: 35px;
+  float: right;">
+          <span style="cursor: pointer;
+  color: #fff;">
             <el-button size="mini" type="warning" @click="logout">退出登录</el-button>
             <img v-bind:src="url" />
           </span>
