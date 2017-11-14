@@ -1,14 +1,5 @@
 <template>
-  <el-form  ref="loginForm" label-position="left" label-width="0px" style="-webkit-border-radius: 5px;
-  border-radius: 5px;
-  -moz-border-radius: 5px;
-  background-clip: padding-box;
-  margin: 180px auto;
-  width: 350px;
-  padding: 35px 35px 15px 35px;
-  background: #fff;
-  border: 1px solid #eaeaea;
-  box-shadow: 0 0 25px #cac6c6;">
+  <el-form  ref="loginForm" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3>系统登录</h3>
     <el-form-item >
        <img v-bind:src="loginCodeUrl" width="100%" v-if="valid">
