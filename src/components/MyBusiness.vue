@@ -1,11 +1,24 @@
 <template>
   <section>
-    <el-row class="container">
+    <el-row style="
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 100%;">
       <el-col :span="24" style="height: 60px;
   line-height: 60px;
   background: #20a0ff;
   color: #fff;">
-        <el-col :span="10" class="logo" :class="logo-width">
+        <el-col :span="10" style="
+  width: 230px;
+  height: 60px;
+  font-size: 22px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-color: rgba(238, 241, 146, 0.3);
+  border-right-width: 1px;
+  border-right-style: solid;
+  width: 230px;">
           吃饭啦后台管理
         </el-col>
         <el-col :span="4" style="text-align: right;
@@ -14,7 +27,12 @@
           <span style="cursor: pointer;
   color: #fff;">
             <el-button size="mini" type="warning" @click="logout">退出登录</el-button>
-            <img v-bind:src="url" />
+            <img v-bind:src="url" style="
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  margin: 10px 0px 10px 10px;
+  float: right;" />
           </span>
         </el-col>
       </el-col>
@@ -84,68 +102,3 @@ export default {
 };
 </script>
 
-<style scoped>
-.header {
-  height: 60px;
-  line-height: 60px;
-  background: #20a0ff;
-  color: #fff;
-}
-
-.userinfo {
-  text-align: right;
-  padding-right: 35px;
-  float: right;
-}
-
-.userinfo-inner {
-  cursor: pointer;
-  color: #fff;
-}
-
-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  margin: 10px 0px 10px 10px;
-  float: right;
-}
-
-.logo {
-  width: 230px;
-  height: 60px;
-  font-size: 22px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-color: rgba(238, 241, 146, 0.3);
-  border-right-width: 1px;
-  border-right-style: solid;
-}
-
-.txt {
-  color: #fff;
-}
-
-.logo-width {
-  width: 230px;
-}
-
-.logo-collapse-width {
-  width: 60px;
-}
-
-.tools {
-  padding: 0px 23px;
-  width: 14px;
-  height: 60px;
-  line-height: 60px;
-  cursor: pointer;
-}
-
-.container {
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  width: 100%;
-}
-</style>
