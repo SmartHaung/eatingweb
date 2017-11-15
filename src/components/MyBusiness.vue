@@ -38,7 +38,7 @@
       </el-col>
       <el-col>
         <el-table :data="tableData" style="width: 100%">
-          <el-table-column label="店铺名称" width="180">
+          <el-table-column label="店铺名称">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.businessInfoName }}</span>
             </template>
